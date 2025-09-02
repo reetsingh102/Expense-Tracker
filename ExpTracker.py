@@ -10,6 +10,7 @@ if not os.path.exists(FILE_NAME):
     df = pd.DataFrame(columns=["Date", "Category", "Amount", "Description"])
     df.to_csv(FILE_NAME, index=False)
 
+# to add a new expense 
 def add_expense(date, category, amount, description=""):
     df = pd.read_csv(FILE_NAME)
     new_expense = {"Date": date, "Category": category, "Amount": amount, "Description": description}
@@ -17,10 +18,16 @@ def add_expense(date, category, amount, description=""):
     df.to_csv(FILE_NAME, index=False)
     print("✅ Expense added!")
 
+#to show summary of the expenses 
 def show_expenses():
     df = pd.read_csv(FILE_NAME)
-    print(df)
+    if df.empty:
+        print("No expenses to show")
+        return
+    summary = df.groupby("category")['amount'].sum()
+    print("\n expense Summary by Category :\n"), summary 
 
+# to show a graph of the expenses 
 def plot_expenses():
     df = pd.read_csv(FILE_NAME)
     if df.empty:
@@ -34,7 +41,7 @@ def plot_expenses():
     plt.tight_layout()
     plt.show()
 
-# Simple menu
+# main program loop
 while True:
     print("\nExpense Tracker Menu:")
     print("1. Add Expense")
@@ -59,3 +66,4 @@ while True:
         break
     else:
         print("Invalid choice, try again.")
+
